@@ -1,0 +1,288 @@
+{
+  "descripcion": "Cifras del EDA sobre los datos entregados. Determinista: sin marcas de tiempo ni aleatoriedad.",
+  "datos_recolectados": {
+    "fuente": "Nubes LiDAR .laz de cartografía móvil (Velodyne VLP-16), entregadas por enlace de OneDrive",
+    "unidad_de_analisis": "punto LiDAR; para modelado, tesela de 40 m",
+    "grupos": [
+      "Pachacamac",
+      "ate"
+    ],
+    "escaneos": [
+      "AVP01MT2611202501",
+      "AVP01MT2611202502",
+      "AVP01MT2611202503",
+      "PACHAP01MT0108202501",
+      "PACHAP01MT0108202502",
+      "PACHAP01MT0108202503",
+      "PACHAP01MT0108202504",
+      "PACHAP01MT0108202505",
+      "PACHAP01MT0108202506",
+      "PACHAP01MT0108202507",
+      "PACHAP01MT0208202501",
+      "PACHAP01MT0208202502",
+      "PACHAP01MT0208202503",
+      "PACHAP01MT0208202504",
+      "PACHAP01MT0208202505",
+      "PACHAP01MT0208202506"
+    ],
+    "archivos_laz": 474,
+    "bytes_comprimidos": 37176436553,
+    "n_registros_puntos": 5443246642,
+    "n_variables_por_punto": 19,
+    "variables_por_punto": [
+      "X",
+      "Y",
+      "Z",
+      "intensity",
+      "return_number",
+      "number_of_returns",
+      "scan_direction_flag",
+      "edge_of_flight_line",
+      "classification",
+      "synthetic",
+      "key_point",
+      "withheld",
+      "scan_angle_rank",
+      "user_data",
+      "point_source_id",
+      "gps_time",
+      "red",
+      "green",
+      "blue"
+    ],
+    "n_variables_informativas": 9,
+    "formato": {
+      "las_version": [
+        "1.2"
+      ],
+      "point_format": [
+        3
+      ],
+      "escala_m": [
+        0.001,
+        0.001,
+        0.001
+      ]
+    },
+    "periodo_cubierto": {
+      "AVP01MT2611202501": {
+        "fecha": "2025-11-26",
+        "dia": "miércoles",
+        "inicio_hora_local": "08:35",
+        "fin_hora_local": "09:27",
+        "duracion_min": 52.4,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "AVP01MT2611202502": {
+        "fecha": "2025-11-26",
+        "dia": "miércoles",
+        "inicio_hora_local": "09:40",
+        "fin_hora_local": "10:22",
+        "duracion_min": 41.3,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "AVP01MT2611202503": {
+        "fecha": "2025-11-26",
+        "dia": "miércoles",
+        "inicio_hora_local": "10:29",
+        "fin_hora_local": "11:18",
+        "duracion_min": 48.6,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0108202501": {
+        "fecha": "2025-08-01",
+        "dia": "viernes",
+        "inicio_hora_local": "09:08",
+        "fin_hora_local": "09:43",
+        "duracion_min": 35.0,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0108202502": {
+        "fecha": "2025-08-01",
+        "dia": "viernes",
+        "inicio_hora_local": "09:55",
+        "fin_hora_local": "10:43",
+        "duracion_min": 48.7,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0108202503": {
+        "fecha": "2025-08-01",
+        "dia": "viernes",
+        "inicio_hora_local": "10:58",
+        "fin_hora_local": "11:39",
+        "duracion_min": 40.1,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0108202504": {
+        "fecha": "2025-08-01",
+        "dia": "viernes",
+        "inicio_hora_local": "11:55",
+        "fin_hora_local": "12:28",
+        "duracion_min": 32.3,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0108202505": {
+        "fecha": "2025-08-01",
+        "dia": "viernes",
+        "inicio_hora_local": "14:06",
+        "fin_hora_local": "14:27",
+        "duracion_min": 20.9,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0108202506": {
+        "fecha": "2025-08-01",
+        "dia": "viernes",
+        "inicio_hora_local": "14:39",
+        "fin_hora_local": "15:34",
+        "duracion_min": 54.4,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0108202507": {
+        "fecha": "2025-08-01",
+        "dia": "viernes",
+        "inicio_hora_local": "15:41",
+        "fin_hora_local": "16:23",
+        "duracion_min": 42.8,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0208202501": {
+        "fecha": "2025-08-02",
+        "dia": "sábado",
+        "inicio_hora_local": "09:19",
+        "fin_hora_local": "10:20",
+        "duracion_min": 61.4,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0208202502": {
+        "fecha": "2025-08-02",
+        "dia": "sábado",
+        "inicio_hora_local": "11:00",
+        "fin_hora_local": "12:19",
+        "duracion_min": 79.3,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0208202503": {
+        "fecha": "2025-08-02",
+        "dia": "sábado",
+        "inicio_hora_local": "15:31",
+        "fin_hora_local": "16:16",
+        "duracion_min": 44.9,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0208202504": {
+        "fecha": "2025-07-30",
+        "dia": "miércoles",
+        "inicio_hora_local": "10:25",
+        "fin_hora_local": "11:24",
+        "duracion_min": 58.9,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0208202505": {
+        "fecha": "2025-07-30",
+        "dia": "miércoles",
+        "inicio_hora_local": "11:29",
+        "fin_hora_local": "12:26",
+        "duracion_min": 57.2,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      },
+      "PACHAP01MT0208202506": {
+        "fecha": "2025-07-30",
+        "dia": "miércoles",
+        "inicio_hora_local": "12:38",
+        "fin_hora_local": "13:12",
+        "duracion_min": 33.7,
+        "gps_time_type": 0,
+        "fecha_tomada_de": "nombre de carpeta del escaneo"
+      }
+    },
+    "variable_objetivo": "classification (LAS): clase de la ontología por punto",
+    "variable_objetivo_estado": "100.00 % de los puntos muestreados = 1 (sin clasificar): la variable objetivo aún no existe; se construye anotando",
+    "estado_acceso": "Disponible: descargado y verificado por hash"
+  },
+  "calidad": {
+    "faltantes": {
+      "archivos_sin_crs_pct": 100.0,
+      "puntos_sin_color_pct": 0.0099,
+      "puntos_sin_etiqueta_pct": 100.0
+    },
+    "duplicados_inconsistencias": {
+      "puntos_duplicados_exactos_pct": 0.0032,
+      "color_16_bits_con_valores_8_bits": true,
+      "retornos_distintos_de_1_pct": 5.1351
+    },
+    "atipicos": {
+      "regla": "Tukey sobre Z por archivo, k = 3.0",
+      "z_por_debajo_pct": 0.0687,
+      "z_por_encima_pct": 3.6083,
+      "intensidad_saturada_255_pct": 0.2508,
+      "decision": "No se borran en el EDA. La etapa de limpieza (E3) usa recorte por altura sobre el suelo y filtro de componentes, nunca SOR global: ver docs/decisiones/0004-el-sor-destruye-los-cables.md"
+    },
+    "sesgo_representatividad": {
+      "dias_de_captura": 4,
+      "escaneos": 16,
+      "densidad_min_pts_m2": 5.1,
+      "densidad_mediana_pts_m2": 93.7,
+      "densidad_max_pts_m2": 3844.1,
+      "densidad_razon_max_min": 760.8,
+      "anillos_laser": 16,
+      "retorno_unico": false,
+      "puntos_saturados_tono_calido_pct": 89.69
+    }
+  },
+  "hallazgos": [
+    {
+      "cifra": "100.00 % de los puntos con classification = 1",
+      "consecuencia": "no hay variable objetivo: la ruta crítica es la anotación, no la elección de arquitectura",
+      "evidencia": "etapa_1_2_comprension/resultados/figuras/fig03_clasificacion.png"
+    },
+    {
+      "cifra": "densidad de 5 a 3844 pts/m² (761x)",
+      "consecuencia": "un radio de vecindad fijo no es comparable entre zonas: rasgos multiescala y reducción por vóxeles",
+      "evidencia": "etapa_1_2_comprension/resultados/figuras/fig02_densidad_por_archivo.png"
+    },
+    {
+      "cifra": "16 anillos de láser y retorno único",
+      "consecuencia": "sensor VLP-16 (±3 cm): la precisión milimétrica no es alcanzable y el suelo debe ajustarse geométricamente",
+      "evidencia": "etapa_1_2_comprension/resultados/figuras/fig04_anillos_laser.png"
+    },
+    {
+      "cifra": "2.00 % de los puntos (a cualquier altura, copas incluidas) con tono verde saturado; 90 % de los saturados con tono cálido",
+      "consecuencia": "la clase área verde no puede apoyarse solo en el color: reglas provisionales y corrección humana",
+      "evidencia": "etapa_1_2_comprension/resultados/figuras/fig06_tono_del_color.png"
+    },
+    {
+      "cifra": "100 % de archivos sin sistema de referencia",
+      "consecuencia": "se estampa EPSG:32718 en toda exportación a SIG/CAD",
+      "evidencia": "etapa_1_2_comprension/resultados/figuras/fig01_huellas_escaneos.png"
+    }
+  ],
+  "muestra": {
+    "archivos": 12,
+    "puntos_por_archivo_max": 1000000,
+    "puntos": 12000000,
+    "criterio": "cada k-ésimo archivo en orden de ruta, primer bloque"
+  },
+  "figuras": {
+    "huellas": "etapa_1_2_comprension/resultados/figuras/fig01_huellas_escaneos.png",
+    "densidad": "etapa_1_2_comprension/resultados/figuras/fig02_densidad_por_archivo.png",
+    "clasificacion": "etapa_1_2_comprension/resultados/figuras/fig03_clasificacion.png",
+    "anillos": "etapa_1_2_comprension/resultados/figuras/fig04_anillos_laser.png",
+    "intensidad_z": "etapa_1_2_comprension/resultados/figuras/fig05_intensidad_y_altura.png",
+    "tono": "etapa_1_2_comprension/resultados/figuras/fig06_tono_del_color.png"
+  }
+}

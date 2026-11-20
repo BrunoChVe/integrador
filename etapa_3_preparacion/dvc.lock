@@ -1,0 +1,627 @@
+schema: '2.0'
+stages:
+  eda:
+    cmd: python ../etapa_1_2_comprension/codigo/eda.py
+    deps:
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202501/LiDAR
+      hash: md5
+      md5: 5951f4f51e8512948f248068c1254d0e.dir
+      size: 1222450154
+      nfiles: 23
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202502/LiDAR
+      hash: md5
+      md5: 069d2d71b9cbd1b4ad9330fab79eceeb.dir
+      size: 1954734096
+      nfiles: 42
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202503/LiDAR
+      hash: md5
+      md5: 333ad9fde0f96c10b640976cc3ce7079.dir
+      size: 2179114318
+      nfiles: 28
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202504/LiDAR
+      hash: md5
+      md5: bdcdd2d900365ea1473af7bde5675b0a.dir
+      size: 1524887189
+      nfiles: 20
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202505/LiDAR
+      hash: md5
+      md5: 1303aca76ca12fad6d9919ac2bd70e6f.dir
+      size: 1040610152
+      nfiles: 13
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202506/LiDAR
+      hash: md5
+      md5: 95d566110bbebc16ea34e7bd2f80e7af.dir
+      size: 2854557840
+      nfiles: 34
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202507/LiDAR
+      hash: md5
+      md5: 2a207acad517adde1b9614d28533fbc6.dir
+      size: 2777214516
+      nfiles: 26
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202501/LiDAR
+      hash: md5
+      md5: f7090b5dcf072448ea859ca0acf03321.dir
+      size: 3255683337
+      nfiles: 33
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202502/LiDAR
+      hash: md5
+      md5: 2a51e275f960effde04bff01310215d1.dir
+      size: 2974537916
+      nfiles: 52
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202503/LiDAR
+      hash: md5
+      md5: 4641aeda7b41d832a3d22cbf8521e30c.dir
+      size: 2554742401
+      nfiles: 29
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202504/LiDAR
+      hash: md5
+      md5: 5cd08c2067889b1fd279f83e38d04e59.dir
+      size: 4808516743
+      nfiles: 42
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202505/LiDAR
+      hash: md5
+      md5: 2717177ce8fec722f4efd72e28488317.dir
+      size: 3763891133
+      nfiles: 41
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202506/LiDAR
+      hash: md5
+      md5: 6037e83ae95154828cc0d88fc951fb7e.dir
+      size: 2869926598
+      nfiles: 30
+    - path: ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202501/LiDAR
+      hash: md5
+      md5: 37181a207ee4f7b32c96be43b49bb039.dir
+      size: 1175234084
+      nfiles: 18
+    - path: ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202502/LiDAR
+      hash: md5
+      md5: 0fc4b8dc495bfdcd69baba7933ad5153.dir
+      size: 1425613213
+      nfiles: 14
+    - path: ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202503/LiDAR
+      hash: md5
+      md5: ff9a910c348a57e98d834e9842e2eee2.dir
+      size: 794722863
+      nfiles: 29
+    - path: ../etapa_1_2_comprension/codigo/eda.py
+      hash: md5
+      md5: 71576e3ed1919e50b2d37426de02a89e
+      size: 18949
+    - path: codigo/common/config.py
+      hash: md5
+      md5: 20a52c95ccf79860200e45fe0059e744
+      size: 7571
+    - path: codigo/common/io_cloud.py
+      hash: md5
+      md5: d9f294be5dd47aee1fa1a00b2255648f
+      size: 13466
+    params:
+      params.yaml:
+        eda:
+          sample_files: 12
+          sample_chunk_points: 1000000
+          outlier_iqr_k: 3.0
+          scan_date_pattern: (\d{2})(\d{2})(\d{4})\d{2}$
+          gps_utc_leap_seconds: 18
+          local_utc_offset_hours: -5
+          banda_verde_hue_deg:
+          - 70
+          - 170
+          banda_verde_min_saturation: 0.12
+          banda_verde_min_value: 0.12
+        select.keep_dimensions:
+        - x
+        - y
+        - z
+        - intensity
+        - gps_time
+        - red
+        - green
+        - blue
+        - point_source_id
+        select.scan_groups:
+        - Grupo03_crudo_2025
+        - Grupo01_crudo_2025
+        select.scans: []
+    outs:
+    - path: ../etapa_1_2_comprension/resultados/eda.json
+      hash: md5
+      md5: 4ad58fdb0cd54249bd6d30eddd7f0870
+      size: 10162
+    - path: ../etapa_1_2_comprension/resultados/figuras
+      hash: md5
+      md5: 73ac2359b7e8c98f989685604521265c.dir
+      size: 496171
+      nfiles: 6
+  seleccionar:
+    cmd: python codigo/seleccionar.py
+    deps:
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202501/LiDAR
+      hash: md5
+      md5: 5951f4f51e8512948f248068c1254d0e.dir
+      size: 1222450154
+      nfiles: 23
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202502/LiDAR
+      hash: md5
+      md5: 069d2d71b9cbd1b4ad9330fab79eceeb.dir
+      size: 1954734096
+      nfiles: 42
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202503/LiDAR
+      hash: md5
+      md5: 333ad9fde0f96c10b640976cc3ce7079.dir
+      size: 2179114318
+      nfiles: 28
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202504/LiDAR
+      hash: md5
+      md5: bdcdd2d900365ea1473af7bde5675b0a.dir
+      size: 1524887189
+      nfiles: 20
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202505/LiDAR
+      hash: md5
+      md5: 1303aca76ca12fad6d9919ac2bd70e6f.dir
+      size: 1040610152
+      nfiles: 13
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202506/LiDAR
+      hash: md5
+      md5: 95d566110bbebc16ea34e7bd2f80e7af.dir
+      size: 2854557840
+      nfiles: 34
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202507/LiDAR
+      hash: md5
+      md5: 2a207acad517adde1b9614d28533fbc6.dir
+      size: 2777214516
+      nfiles: 26
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202501/LiDAR
+      hash: md5
+      md5: f7090b5dcf072448ea859ca0acf03321.dir
+      size: 3255683337
+      nfiles: 33
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202502/LiDAR
+      hash: md5
+      md5: 2a51e275f960effde04bff01310215d1.dir
+      size: 2974537916
+      nfiles: 52
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202503/LiDAR
+      hash: md5
+      md5: 4641aeda7b41d832a3d22cbf8521e30c.dir
+      size: 2554742401
+      nfiles: 29
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202504/LiDAR
+      hash: md5
+      md5: 5cd08c2067889b1fd279f83e38d04e59.dir
+      size: 4808516743
+      nfiles: 42
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202505/LiDAR
+      hash: md5
+      md5: 2717177ce8fec722f4efd72e28488317.dir
+      size: 3763891133
+      nfiles: 41
+    - path: 
+        ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202506/LiDAR
+      hash: md5
+      md5: 6037e83ae95154828cc0d88fc951fb7e.dir
+      size: 2869926598
+      nfiles: 30
+    - path: ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202501/LiDAR
+      hash: md5
+      md5: 37181a207ee4f7b32c96be43b49bb039.dir
+      size: 1175234084
+      nfiles: 18
+    - path: ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202502/LiDAR
+      hash: md5
+      md5: 0fc4b8dc495bfdcd69baba7933ad5153.dir
+      size: 1425613213
+      nfiles: 14
+    - path: ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202503/LiDAR
+      hash: md5
+      md5: ff9a910c348a57e98d834e9842e2eee2.dir
+      size: 794722863
+      nfiles: 29
+    - path: codigo/common/config.py
+      hash: md5
+      md5: 20a52c95ccf79860200e45fe0059e744
+      size: 7571
+    - path: codigo/common/io_cloud.py
+      hash: md5
+      md5: d9f294be5dd47aee1fa1a00b2255648f
+      size: 13466
+    - path: codigo/seleccionar.py
+      hash: md5
+      md5: 49355d32035c1139c8ec5d7c8b8232a2
+      size: 11809
+    params:
+      params.yaml:
+        project.crs_epsg: 32718
+        select.keep_dimensions:
+        - x
+        - y
+        - z
+        - intensity
+        - gps_time
+        - red
+        - green
+        - blue
+        - point_source_id
+        select.perfil:
+          archivos_muestra: 12
+          puntos_por_archivo: 2000000
+          puntos_para_conteos: 200000
+        select.scan_groups:
+        - Grupo03_crudo_2025
+        - Grupo01_crudo_2025
+        select.scans: []
+        select.umbral_retorno_unico: 0.9
+    outs:
+    - path: ../datos/intermedio/catalogo
+      hash: md5
+      md5: 9cc5db6b0c63d2b03d75062dee64325a.dir
+      size: 373869
+      nfiles: 2
+    - path: reportes/raw_profile.json
+      hash: md5
+      md5: 1aacdba0f49f679249e0bf7f80ea6887
+      size: 9152
+  bloques:
+    cmd: python codigo/bloques.py
+    deps:
+    - path: ../datos/intermedio/catalogo
+      hash: md5
+      md5: 9cc5db6b0c63d2b03d75062dee64325a.dir
+      size: 373869
+      nfiles: 2
+    - path: codigo/bloques.py
+      hash: md5
+      md5: e11b91423e21923a2f1a32c773405f3a
+      size: 17033
+    - path: codigo/common/anotacion.py
+      hash: md5
+      md5: 2ea9ee766d255f2337bc5b5769854ab5
+      size: 3697
+    - path: codigo/common/io_cloud.py
+      hash: md5
+      md5: d9f294be5dd47aee1fa1a00b2255648f
+      size: 13466
+    params:
+      params.yaml:
+        project.crs_epsg: 32718
+        tiling.bloque_m: 200.0
+        tiling.bloque_selection: densest
+        tiling.buffer_m: 10.0
+        tiling.max_bloques_por_escaneo: 0
+        tiling.min_points: 2000
+        tiling.tesela_m: 40.0
+    outs:
+    - path: ../datos/intermedio/01_bloques
+      hash: md5
+      md5: 6154c64bc82af8853c28b3760244804e.dir
+      size: 44055565425
+      nfiles: 800
+    - path: reportes/bloques.json
+      hash: md5
+      md5: 9e19a33a878ecf4ce4c3e9954d595384
+      size: 191
+  particionar:
+    cmd: python codigo/particionar.py
+    deps:
+    - path: ../datos/intermedio/01_bloques
+      hash: md5
+      md5: 6154c64bc82af8853c28b3760244804e.dir
+      size: 44055565425
+      nfiles: 800
+    - path: codigo/common/config.py
+      hash: md5
+      md5: 20a52c95ccf79860200e45fe0059e744
+      size: 7571
+    - path: codigo/particionar.py
+      hash: md5
+      md5: c494c65bf65227d76a96225a8921b769
+      size: 6217
+    params:
+      params.yaml:
+        particion:
+          supercelda_m: 1000.0
+          proporciones:
+            train: 0.7
+            valid: 0.15
+            test: 0.15
+        project.random_seed: 42
+        tiling.bloque_m: 200.0
+    outs:
+    - path: ../datos/final/particion.csv
+      hash: md5
+      md5: 69ed11ff54876668b970ec7cd24415ed
+      size: 129380
+    - path: reportes/particion.json
+      hash: md5
+      md5: 8dfee04db64c01f1a91a197839ce2bc4
+      size: 1073
+  documentar:
+    cmd: python codigo/documentar.py
+    deps:
+    - path: ../datos/final/particion.csv
+      hash: md5
+      md5: 69ed11ff54876668b970ec7cd24415ed
+      size: 129380
+    - path: ../datos/intermedio/01_bloques
+      hash: md5
+      md5: 6154c64bc82af8853c28b3760244804e.dir
+      size: 44055565425
+      nfiles: 800
+    - path: codigo/common/config.py
+      hash: md5
+      md5: 20a52c95ccf79860200e45fe0059e744
+      size: 7571
+    - path: codigo/documentar.py
+      hash: md5
+      md5: 5d14b9ee8d3086a921c7e71421ec01b7
+      size: 25735
+    - path: reportes/bloques.json
+      hash: md5
+      md5: 9e19a33a878ecf4ce4c3e9954d595384
+      size: 191
+    - path: reportes/raw_profile.json
+      hash: md5
+      md5: 1aacdba0f49f679249e0bf7f80ea6887
+      size: 9152
+    params:
+      params.yaml:
+        informe:
+          bloques_muestra: 5
+        ontology:
+          version: 7
+          ignore_id: 0
+          classes:
+          - id: 0
+            name: unclassified
+            name_es: ruido_sin_clasificar
+            estado: activa
+            color:
+            - 128
+            - 128
+            - 128
+            description: "Todo lo que no es un activo del alcance actual: suelo, fachadas,
+              vegetacion, cables de baja y de telecomunicaciones, vehiculos, peatones,
+              ruido, y cualquier cosa sobre la que el anotador no tenga confianza.
+              Es un cajon de sastre a proposito: forzar una respuesta aqui contaminaria
+              las otras clases. Con el alcance de 0017 esta clase pasa a ser la mayoria
+              abrumadora de los puntos, y por eso queda EXCLUIDA de la perdida y de
+              la mIoU (`ignore_id`): el modelo no se entrena para acertar \"no es
+              nada\", se entrena para encontrar los postes. La ferreteria ACOPLADA
+              al poste —mensula, cruceta— no cae aqui: es parte del poste desde 0015.\n"
+          - id: 5
+            name: pole_lv
+            name_es: poste_bt
+            estado: activa
+            color:
+            - 0
+            - 150
+            - 100
+            description: "Poste de baja tension, CON o SIN luminaria instalada. Alcanza
+              hasta unos 8 m, frente a los mas de 11 m del poste de media. Incluye
+              el fuste MAS todo lo acoplado a el: mensulas, crucetas y herrajes (0015)
+              y, desde 0023, tambien el conjunto de alumbrado —pastoral mas luminaria—.
+              Un poste con luminaria es UN solo recorte, entero, con esta clase. NO
+              incluye los conductores que cuelgan de la mensula. RETENIDA (0025):
+              el brazo rigido del violin es poste; el cable que baja al piso, y su
+              anclaje, son fondo. Lo que lo separa del poste de media es la altura
+              y la ausencia de conductores de MT junto a su punta, no la luminaria.\n"
+          - id: 12
+            name: pole_mv
+            name_es: poste_mt
+            estado: activa
+            color:
+            - 255
+            - 170
+            - 0
+            description: "Poste de media tension. Es el mas alto de la escena —supera
+              los 11 m— y sostiene los conductores de MT. Se identifica por altura
+              de columna y por tener conductores de media pasando junto a su punta.
+              Incluye fuste, cruceta y herrajes (0015) y, si la lleva, la luminaria
+              con su pastoral (0023): todo el poste es un solo recorte con esta clase.
+              Retenida: el brazo rigido es poste, el cable al piso es fondo (0025).\n"
+          - id: 13
+            name: luminaire
+            name_es: luminaria
+            estado: obsoleta
+            color:
+            - 255
+            - 240
+            - 60
+            description: "OBSOLETA desde 0023: la luminaria vuelve a ser parte del
+              poste (5 o 12), que se recorta entero. El id se conserva, y no se reutiliza,
+              para poder leer anotaciones hechas entre 0017 y 0023. Lo que sigue es
+              la definicion que tuvo, por si se reactiva como clase propia. El conjunto
+              de alumbrado publico completo: el PASTORAL —el brazo curvo que saca
+              la carga fuera del eje del poste— mas el BLOQUE de la luminaria en su
+              extremo. Clase propia desde 0017, y no un tipo de poste, porque la luminaria
+              se instala indistintamente sobre un poste de baja (clase 5) y sobre
+              uno de media (clase 12): hacerla atributo del poste obligaba a duplicar
+              cada clase de poste, y asi el conteo de puntos de alumbrado —que es
+              lo que mide el inventario— no se podia sacar de la prediccion. Se reconoce
+              por tres cosas (0014, 0015): saca la carga a mas de 1 m del eje, acaba
+              en un BLOQUE compacto, y de su punta NO cuelgan conductores. Una mensula
+              tambien es un brazo lateral, pero es corta, de seccion constante, y
+              de su extremo sale la baja tension: la mensula es poste, no luminaria.
+              El limite con el poste se corta donde el pastoral se separa del fuste.
+              Es un corte convencional y algo ambiguo en 2-3 cm de puntos; esa ambiguedad
+              es conocida y se acepta.\n"
+          - id: 9
+            name: conductor_mv
+            name_es: conductor_mt
+            estado: en_espera
+            color:
+            - 255
+            - 110
+            - 0
+            description: "Conductores de media tension: la red MT, el unico nivel
+              de conductor dentro del alcance de 0017. Es el mas alto de la escena
+              y el mas facil de anotar, que es justo por lo que entra: sus postes
+              superan los 11 m frente a los 8 m de baja, y suele ir en TRES FASES
+              sobre cruceta, con una separacion entre fases de 0.3 a 1.5 m que ninguna
+              otra estructura de la calle reproduce. Cuando el armado es autoportante
+              se ve como una sola linea, pero siempre por encima del nivel de BT.
+              La baja tension antigua puede venir en 3 a 5 conductores paralelos y
+              confundirse con un haz de MT: se separa por altura del haz (ver `weak_labels.wires.mv_bundle`).
+              La separacion por altura sola es PROVISIONAL: ver 0013.\n"
+          - id: 11
+            name: pole_lv_light
+            name_es: poste_bt_luminaria
+            estado: obsoleta
+            color:
+            - 0
+            - 200
+            - 160
+            description: "OBSOLETA desde 0017. Era \"poste de baja CON luminaria\"\
+              , de cuando la luminaria era un tipo de poste en vez de una clase. Se
+              descompone en poste_bt (5) para el fuste y luminaria (13) para el alumbrado.
+              El id se conserva, y no se reutiliza, para poder seguir leyendo las
+              anotaciones registradas antes de 0017; `tools/migrar_ontologia.py` las
+              reparte entre 5 y 13.\n"
+          - id: 1
+            name: road
+            name_es: pista
+            estado: en_espera
+            color:
+            - 80
+            - 80
+            - 80
+            description: Superficie de calzada vehicular, hasta el borde de la 
+              vereda.
+          - id: 2
+            name: sidewalk
+            name_es: vereda
+            estado: en_espera
+            color:
+            - 200
+            - 180
+            - 140
+            description: "Vereda peatonal, incluido su borde elevado. Ese borde no
+              es una clase aparte: 12-20 cm de alto no sobreviven a voxeles de 5 cm,
+              y separarlo daria una clase casi sin puntos (ver 0013).\n"
+          - id: 3
+            name: building
+            name_es: limite_construccion
+            estado: en_espera
+            color:
+            - 180
+            - 70
+            - 60
+            description: "Fachadas y muros de limite de propiedad. Objetivo del paso
+              de vectorizacion de poligonos para exportacion a CAD.\n"
+          - id: 4
+            name: manhole
+            name_es: buzon
+            estado: en_espera
+            color:
+            - 255
+            - 200
+            - 0
+            description: "Tapas de acceso a servicios, enrasadas con la pista o la
+              vereda. La clase mas dificil: un disco de 0.6 a 1.0 m geometricamente
+              coplanar con su entorno, separable sobre todo por intensidad y color.\n"
+          - id: 6
+            name: conductor_lv
+            name_es: conductor_bt
+            estado: en_espera
+            color:
+            - 230
+            - 30
+            - 30
+            description: "Conductores de baja tension. Cuelgan de postes que llegan
+              hasta unos 8 m, por encima del nivel de telecomunicaciones y por debajo
+              de la media tension. Antes esta clase agrupaba BT y MT (ver 0013). Aunque
+              esta en espera, el borrador sigue calculando su mascara EN MEMORIA sin
+              etiquetarla: es la senal negativa que distingue una mensula de un pastoral
+              —si del extremo del brazo cuelga baja tension, es mensula— y sin ella
+              la clase 13 pierde su mejor discriminante.\n"
+          - id: 7
+            name: telecom_line
+            name_es: cable_telecom
+            estado: en_espera
+            color:
+            - 30
+            - 90
+            - 230
+            description: "Haces de telefonia, television por cable y fibra. Cuelgan
+              por debajo del nivel electrico y son mucho mas densos y desordenados
+              (las \"telaranas\"). Separar la clase 6 de la 7 es sobre todo un problema
+              de nivel de altura y grosor de haz, no de apariencia punto a punto.\n"
+          - id: 8
+            name: green_area
+            name_es: area_verde
+            estado: en_espera
+            color:
+            - 110
+            - 180
+            - 60
+            description: "Areas verdes a nivel de suelo junto a la calzada: bermas
+              y separadores con cesped, jardines, maceteros y alcorques. La vegetacion
+              en altura es la clase 10 (arbol). Clase minoritaria: menos del 1 % de
+              los puntos a nivel de suelo tiene tono verde saturado.\n"
+          - id: 10
+            name: tree
+            name_es: arbol
+            estado: en_espera
+            color:
+            - 30
+            - 110
+            - 50
+            description: "Copas y ramaje: vegetacion por encima de 2 m. Se separa
+              del area verde porque son problemas distintos: la copa importa para
+              las distancias de seguridad a los conductores, el area verde para el
+              contexto de superficie.\n"
+        project.crs_epsg: 32718
+        select.keep_dimensions:
+        - x
+        - y
+        - z
+        - intensity
+        - gps_time
+        - red
+        - green
+        - blue
+        - point_source_id
+        tiling.bloque_m: 200.0
+        tiling.min_points: 2000
+    outs:
+    - path: ../docs/diccionario/diccionario.csv
+      hash: md5
+      md5: 5995a1c5cad2c7d3cb382de8c932d14e
+      size: 5487
+    - path: ../docs/diccionario/diccionario.md
+      hash: md5
+      md5: 2263e3f09e464908846ce2b650cddd0c
+      size: 6819
+    - path: reportes/informe_limpieza.json
+      hash: md5
+      md5: 52423e7c4f15482d01c1a74fbcc9a492
+      size: 5783
+    - path: reportes/informe_limpieza.md
+      hash: md5
+      md5: cd49d7d2a503788839c463bd9603aca6
+      size: 5324

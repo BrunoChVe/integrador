@@ -1,0 +1,405 @@
+{
+  "crs_epsg_declared": 32718,
+  "totals": {
+    "lidar_files": 474,
+    "points": 5443246642,
+    "raw_files": 491,
+    "raw_bytes": 37183430812,
+    "compressed_gb": 34.623,
+    "mean_density_pts_m2": 158.8
+  },
+  "by_scan": {
+    "PACHAP01MT0108202501": {
+      "files": 23,
+      "points": 184588532,
+      "min": [
+        298655.57662913145,
+        8647582.610162474,
+        -45.19681226110336
+      ],
+      "max": [
+        299704.6782460795,
+        8648551.597460758,
+        307.7374923053245
+      ],
+      "extent_m": [
+        1049.1,
+        969.0,
+        352.9
+      ]
+    },
+    "PACHAP01MT0108202502": {
+      "files": 42,
+      "points": 293325034,
+      "min": [
+        297558.0896747774,
+        8646936.638069278,
+        -115.13282503452987
+      ],
+      "max": [
+        298986.4770235205,
+        8648227.209192276,
+        254.0504387947675
+      ],
+      "extent_m": [
+        1428.4,
+        1290.6,
+        369.2
+      ]
+    },
+    "PACHAP01MT0108202503": {
+      "files": 28,
+      "points": 328291464,
+      "min": [
+        297180.815,
+        8646233.38298452,
+        -113.15407740815749
+      ],
+      "max": [
+        298083.33557386696,
+        8647722.183045384,
+        215.25363403056764
+      ],
+      "extent_m": [
+        902.5,
+        1488.8,
+        328.4
+      ]
+    },
+    "PACHAP01MT0108202504": {
+      "files": 20,
+      "points": 234567290,
+      "min": [
+        297325.33517648606,
+        8647253.138549313,
+        -113.0619055306618
+      ],
+      "max": [
+        297925.2188075724,
+        8648677.669665657,
+        211.91995462337826
+      ],
+      "extent_m": [
+        599.9,
+        1424.5,
+        325.0
+      ]
+    },
+    "PACHAP01MT0108202505": {
+      "files": 13,
+      "points": 153988278,
+      "min": [
+        296763.6862264164,
+        8647042.855,
+        -114.549
+      ],
+      "max": [
+        297486.211,
+        8647779.63,
+        187.2171145504313
+      ],
+      "extent_m": [
+        722.5,
+        736.8,
+        301.8
+      ]
+    },
+    "PACHAP01MT0108202506": {
+      "files": 34,
+      "points": 426440051,
+      "min": [
+        296595.9552158808,
+        8646987.798857141,
+        -106.54638427869581
+      ],
+      "max": [
+        299523.86783228535,
+        8650540.915,
+        299.1854744297484
+      ],
+      "extent_m": [
+        2927.9,
+        3553.1,
+        405.7
+      ]
+    },
+    "PACHAP01MT0108202507": {
+      "files": 26,
+      "points": 415877825,
+      "min": [
+        295968.661,
+        8647672.408645278,
+        -108.0198279748889
+      ],
+      "max": [
+        298883.8532584017,
+        8650875.433506336,
+        259.3387906461306
+      ],
+      "extent_m": [
+        2915.2,
+        3203.0,
+        367.4
+      ]
+    },
+    "PACHAP01MT0208202501": {
+      "files": 33,
+      "points": 479477951,
+      "min": [
+        297579.8336333618,
+        8647059.216,
+        -51.956311454133015
+      ],
+      "max": [
+        300231.5153582607,
+        8652194.267412951,
+        368.48376781061035
+      ],
+      "extent_m": [
+        2651.7,
+        5135.1,
+        420.4
+      ]
+    },
+    "PACHAP01MT0208202502": {
+      "files": 52,
+      "points": 436455467,
+      "min": [
+        295275.07517643925,
+        8647988.120533938,
+        -89.668
+      ],
+      "max": [
+        297492.594,
+        8650025.673037734,
+        285.4512969009119
+      ],
+      "extent_m": [
+        2217.5,
+        2037.6,
+        375.1
+      ]
+    },
+    "PACHAP01MT0208202503": {
+      "files": 29,
+      "points": 386622480,
+      "min": [
+        296796.923831887,
+        8651237.222512396,
+        -71.06523607194654
+      ],
+      "max": [
+        298835.77621337527,
+        8655496.434230315,
+        309.09101921165467
+      ],
+      "extent_m": [
+        2038.9,
+        4259.2,
+        380.2
+      ]
+    },
+    "PACHAP01MT0208202504": {
+      "files": 42,
+      "points": 697730835,
+      "min": [
+        294585.923378438,
+        8655981.402520236,
+        54.62708039720695
+      ],
+      "max": [
+        296866.0096998799,
+        8663589.250534847,
+        582.394983163685
+      ],
+      "extent_m": [
+        2280.1,
+        7607.8,
+        527.8
+      ]
+    },
+    "PACHAP01MT0208202505": {
+      "files": 41,
+      "points": 565983951,
+      "min": [
+        295348.5921777413,
+        8656451.429954328,
+        73.04819856094662
+      ],
+      "max": [
+        298042.6097759302,
+        8662017.24249026,
+        651.1726105677951
+      ],
+      "extent_m": [
+        2694.0,
+        5565.8,
+        578.1
+      ]
+    },
+    "PACHAP01MT0208202506": {
+      "files": 30,
+      "points": 418740534,
+      "min": [
+        295438.81111808517,
+        8658692.6604033,
+        174.20149135914036
+      ],
+      "max": [
+        297788.55641879706,
+        8661908.890982913,
+        627.917014142248
+      ],
+      "extent_m": [
+        2349.7,
+        3216.2,
+        453.7
+      ]
+    },
+    "AVP01MT2611202501": {
+      "files": 18,
+      "points": 145187421,
+      "min": [
+        291634.16144009295,
+        8667375.728741195,
+        333.8888801638202
+      ],
+      "max": [
+        293200.0912178643,
+        8669823.940464452,
+        528.6807468747452
+      ],
+      "extent_m": [
+        1565.9,
+        2448.2,
+        194.8
+      ]
+    },
+    "AVP01MT2611202502": {
+      "files": 14,
+      "points": 177000773,
+      "min": [
+        290877.17478230514,
+        8667368.004821083,
+        331.991424301299
+      ],
+      "max": [
+        293501.5353692935,
+        8669086.539679548,
+        633.617672963744
+      ],
+      "extent_m": [
+        2624.4,
+        1718.5,
+        301.6
+      ]
+    },
+    "AVP01MT2611202503": {
+      "files": 29,
+      "points": 98968756,
+      "min": [
+        292727.3782875451,
+        8667534.010297326,
+        405.90152718288846
+      ],
+      "max": [
+        293683.37722373777,
+        8668482.116260737,
+        551.4466887437488
+      ],
+      "extent_m": [
+        956.0,
+        948.1,
+        145.5
+      ]
+    }
+  },
+  "attributes": {
+    "files_sampled": 12,
+    "points_sampled": 24000000,
+    "intensity": {
+      "min": 0.0,
+      "max": 255.0,
+      "mean": 107.70537670833333,
+      "std": 52.63481747687878,
+      "p01": 12.0,
+      "p50": 102.0,
+      "p99": 217.0,
+      "distinct": 94
+    },
+    "z": {
+      "min": -75.89600000000002,
+      "max": 469.547,
+      "mean": 198.99012620937495,
+      "std": 134.64376634485595,
+      "p01": 64.334,
+      "p50": 135.16,
+      "p99": 441.61,
+      "distinct": 10000
+    },
+    "ring": {
+      "min": 0.0,
+      "max": 15.0,
+      "mean": 3.677873208333333,
+      "std": 2.7845943968719324,
+      "p01": 0.0,
+      "p50": 3.0,
+      "p99": 13.0,
+      "distinct": 16
+    },
+    "rgb_max": 255,
+    "rgb_is_8bit_valued": true,
+    "rgb_black_fraction": 0.00024741666666666667,
+    "classification_counts": {
+      "1": 2400000
+    },
+    "number_of_returns_counts": {
+      "1": 2269208,
+      "2": 122001,
+      "3": 8791
+    }
+  },
+  "quality_findings": [
+    {
+      "id": "Q1",
+      "severity": "high",
+      "field": "header.crs",
+      "finding": "474 of 474 files declare no CRS (parse_crs() returns None), while coordinates are UTM 18S valued.",
+      "impact": "Anything exported to GIS/CAD would land unreferenced."
+    },
+    {
+      "id": "Q2",
+      "severity": "blocking",
+      "field": "classification",
+      "finding": "Every sampled point carries classification == 1. The delivered set is 100% unlabelled.",
+      "impact": "Supervised segmentation cannot start; annotation is the critical path, not the network architecture."
+    },
+    {
+      "id": "Q3",
+      "severity": "medium",
+      "field": "number_of_returns",
+      "finding": "94.6% of sampled points are single-return; the rest have 2-3 returns.",
+      "impact": "The classic 'last return is ground, first return is wire/vegetation' heuristic is unavailable; ground must be fitted geometrically.",
+      "single_return_fraction": 0.9455
+    },
+    {
+      "id": "Q4",
+      "severity": "low",
+      "field": "red/green/blue",
+      "finding": "Colour is stored in 16-bit LAS fields but only uses the 0-255 range.",
+      "impact": "Naive 16-bit normalisation would make every tile near-black."
+    },
+    {
+      "id": "Q5",
+      "severity": "medium",
+      "field": "density",
+      "finding": "Density varies 5-3844 pts/m2 between files (mobile mapping: near the trajectory is dense, far is sparse).",
+      "impact": "Any fixed-radius feature behaves differently across a tile."
+    }
+  ],
+  "ram_estimate_gb": {
+    "all_points_float64_xyz_rgb": 243.33,
+    "all_points_float32_xyz_uint8_rgb": 76.04,
+    "note": "Both exceed a comfortable share of 15.6 GB of system RAM; the pipeline is tiled for this reason."
+  }
+}

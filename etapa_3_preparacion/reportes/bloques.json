@@ -1,0 +1,9 @@
+{
+  "bloques": 799,
+  "points_core": 5443203444,
+  "points_with_buffer": 6651064655,
+  "mean_core_density_pts_m2": 170.3,
+  "bloque_m": 200.0,
+  "tesela_m": 40.0,
+  "buffer_m": 10.0
+}

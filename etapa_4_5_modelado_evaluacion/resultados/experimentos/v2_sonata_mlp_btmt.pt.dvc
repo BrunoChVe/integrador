@@ -1,0 +1,5 @@
+outs:
+- md5: 80c9228c2cdf406f353532bd311fa434
+  size: 403008
+  hash: md5
+  path: v2_sonata_mlp_btmt.pt

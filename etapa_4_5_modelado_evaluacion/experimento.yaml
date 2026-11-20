@@ -1,0 +1,24 @@
+# ============================================================================
+# experimento.yaml · El vocabulario de MLflow del proyecto.
+# Se acuerda una vez y NO se toca: un experimento nuevo por cada prueba o una
+# métrica con dos nombres vuelven incomparable todo lo registrado.
+# ============================================================================
+mlflow:
+  tracking_uri: http://127.0.0.1:5000        # scripts/servidor_mlflow.sh lo levanta (sqlite, no ./mlruns)
+  experimento: deteccion-postes-lidar        # UN solo experimento para todo el proyecto
+  modelo_registrado: detector-postes         # nombre en el Model Registry
+  alias_campeon: campeon                     # el prototipo consume models:/detector-postes@campeon
+
+tarea: deteccion_por_objeto                  # poste hallado a 1 m o menos, por clase: poste_bt, poste_mt
+metrica_primaria: recuperacion               # postes reales hallados / postes reales. También: precision, f1
+mayor_es_mejor: true
+modelo_baseline: geo_hgb                     # rasgos geométricos + HistGradientBoosting
+
+datos:
+  carpeta: ../datos/crudo/etiquetado         # <escaneo>/poste_bt|poste_mt/<train|test>: la carpeta de cada clase decide su partición
+                                             # desde v3 solo recortes: la nube sale de ../datos/intermedio/01_bloques
+  objetivo: clase_por_recorte                # el sufijo _BT o _MT del recorte
+  puntero_dvc: ../datos/crudo/etiquetado.dvc # de aquí sale la etiqueta datos_md5
+  version_datos: v7                          # etiquetas de Git: etiquetas-v1 ... etiquetas-v7 (sin v6)
+
+semilla: 0

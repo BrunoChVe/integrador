@@ -1,0 +1,5 @@
+outs:
+- md5: b117b2ee72fe8a10bc0f07b8dac9e572
+  size: 401038
+  hash: md5
+  path: v2_cabeza_pesos.npz

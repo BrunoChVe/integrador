@@ -1,0 +1,5 @@
+outs:
+- md5: 7a4c169710d0aedde775ec904fe500fb
+  size: 406750
+  hash: md5
+  path: v7_sonata_mlp_solo_mt.pt

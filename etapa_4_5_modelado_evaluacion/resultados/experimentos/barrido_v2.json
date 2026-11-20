@@ -1,0 +1,211 @@
+{
+ "particion": {
+  "train": [
+   "b_1464_43339",
+   "b_1465_43337",
+   "b_1494_43242",
+   "b_1495_43239",
+   "b_1495_43240",
+   "b_1496_43238",
+   "b_1496_43239"
+  ],
+  "val": [
+   "b_1494_43241",
+   "b_1497_43238"
+  ],
+  "test": [
+   "b_1493_43239",
+   "b_1494_43239",
+   "b_1494_43240"
+  ]
+ },
+ "conjunto": "valid",
+ "etiquetas": {
+  "n_recortes": 14,
+  "md5": "0747898da4f4f6292e1c1fcb06f42eec",
+  "recortes": {
+   "b_1464_43339_BT": "478ab9be1a3c607d599da0b3337e397a",
+   "b_1465_43337_BT": "5be0f1512d410b33dddde8c82dd40bae",
+   "b_1465_43337_MT": "b49c5335ddfa7d00b301066ba84450c7",
+   "b_1493_43239_BT": "fdada093524f82d49788c2261e70c0c4",
+   "b_1494_43239_BT": "8d0c4054c0f50ce98c3f9f8b1451e409",
+   "b_1494_43240_BT": "322c1ee78aa6fb95247f4ba33cf769ae",
+   "b_1494_43240_MT": "54a482bb0d9a888928bf6e7e2ecb2aeb",
+   "b_1494_43241_BT": "3d8c35c0a65f336a0fc348d5b3372da1",
+   "b_1494_43242_BT": "7d90868feee8a5053420cd8a4f46ab97",
+   "b_1495_43239_BT": "3a9e46f96ce3c5983b7454d834f3db97",
+   "b_1495_43240_BT": "e99f5f42289ff69c0758fb9845725c54",
+   "b_1496_43238_BT": "d4583e0d567fd942785ede6697a3f729",
+   "b_1496_43239_BT": "53e0e014044dff6420abbc14ab2028a9",
+   "b_1497_43238_BT": "cf1bf9bf83914ffdadef0e458d48f1f8"
+  }
+ },
+ "filas": [
+  {
+   "familia": "geo_hgb",
+   "hiper": {
+    "learning_rate": 0.1,
+    "max_leaf_nodes": 31,
+    "max_iter": 300
+   },
+   "umbral": 0.85,
+   "reales": 12,
+   "hallados": 9,
+   "predichos": 16,
+   "correctos": 9,
+   "recuperacion": 0.75,
+   "precision": 0.5625,
+   "segundos": 71
+  },
+  {
+   "familia": "geo_hgb",
+   "hiper": {
+    "learning_rate": 0.05,
+    "max_leaf_nodes": 31,
+    "max_iter": 300
+   },
+   "umbral": 0.75,
+   "reales": 12,
+   "hallados": 8,
+   "predichos": 17,
+   "correctos": 9,
+   "recuperacion": 0.6666666666666666,
+   "precision": 0.5294117647058824,
+   "segundos": 72
+  },
+  {
+   "familia": "geo_hgb",
+   "hiper": {
+    "learning_rate": 0.1,
+    "max_leaf_nodes": 63,
+    "max_iter": 150
+   },
+   "umbral": 0.8,
+   "reales": 12,
+   "hallados": 8,
+   "predichos": 27,
+   "correctos": 9,
+   "recuperacion": 0.6666666666666666,
+   "precision": 0.3333333333333333,
+   "segundos": 55
+  },
+  {
+   "familia": "sonata_lineal",
+   "hiper": {
+    "ocultas": [],
+    "dropout": 0.0,
+    "wd": 0.001
+   },
+   "ap_val": 0.8052390197945571,
+   "mejor_epoca": 27,
+   "umbral": 0.95,
+   "reales": 12,
+   "hallados": 7,
+   "predichos": 15,
+   "correctos": 8,
+   "recuperacion": 0.5833333333333334,
+   "precision": 0.5333333333333333,
+   "segundos": 119
+  },
+  {
+   "familia": "sonata_lineal",
+   "hiper": {
+    "ocultas": [],
+    "dropout": 0.0,
+    "wd": 0.01
+   },
+   "ap_val": 0.8049952664539322,
+   "mejor_epoca": 27,
+   "umbral": 0.95,
+   "reales": 12,
+   "hallados": 7,
+   "predichos": 15,
+   "correctos": 8,
+   "recuperacion": 0.5833333333333334,
+   "precision": 0.5333333333333333,
+   "segundos": 90
+  },
+  {
+   "familia": "sonata_mlp",
+   "hiper": {
+    "ocultas": [
+     256,
+     128
+    ],
+    "dropout": 0.3,
+    "wd": 0.001
+   },
+   "ap_val": 0.8741263786254369,
+   "mejor_epoca": 6,
+   "umbral": 0.9,
+   "reales": 12,
+   "hallados": 9,
+   "predichos": 17,
+   "correctos": 10,
+   "recuperacion": 0.75,
+   "precision": 0.5882352941176471,
+   "segundos": 54
+  },
+  {
+   "familia": "sonata_mlp",
+   "hiper": {
+    "ocultas": [
+     128
+    ],
+    "dropout": 0.5,
+    "wd": 0.01
+   },
+   "ap_val": 0.8672558826099569,
+   "mejor_epoca": 9,
+   "umbral": 0.95,
+   "reales": 12,
+   "hallados": 8,
+   "predichos": 16,
+   "correctos": 8,
+   "recuperacion": 0.6666666666666666,
+   "precision": 0.5,
+   "segundos": 64
+  },
+  {
+   "familia": "sonata_mlp",
+   "hiper": {
+    "ocultas": [
+     512,
+     256
+    ],
+    "dropout": 0.3,
+    "wd": 0.001
+   },
+   "ap_val": 0.8789629853932133,
+   "mejor_epoca": 1,
+   "umbral": 0.95,
+   "reales": 12,
+   "hallados": 7,
+   "predichos": 18,
+   "correctos": 8,
+   "recuperacion": 0.5833333333333334,
+   "precision": 0.4444444444444444,
+   "segundos": 70
+  },
+  {
+   "familia": "sonata_mlp",
+   "hiper": {
+    "ocultas": [
+     64
+    ],
+    "dropout": 0.3,
+    "wd": 0.001
+   },
+   "ap_val": 0.8589398363660561,
+   "mejor_epoca": 9,
+   "umbral": 0.85,
+   "reales": 12,
+   "hallados": 10,
+   "predichos": 20,
+   "correctos": 10,
+   "recuperacion": 0.8333333333333334,
+   "precision": 0.5,
+   "segundos": 66
+  }
+ ]
+}

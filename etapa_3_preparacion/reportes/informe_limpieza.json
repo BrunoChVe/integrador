@@ -1,0 +1,124 @@
+{
+  "hallazgos": [
+    {
+      "id": "Q1",
+      "severity": "high",
+      "field": "header.crs",
+      "finding": "474 of 474 files declare no CRS (parse_crs() returns None), while coordinates are UTM 18S valued.",
+      "decision": "corregido",
+      "accion": "Cada bloque se escribe con el CRS de `project.crs_epsg` (EPSG:32718, WGS 84 / UTM 18S) estampado en la cabecera (`io_cloud.write_las`). Las coordenadas no se transforman: ya estaban en UTM 18S, solo faltaba declararlo.",
+      "donde": [
+        "etapa_3_preparacion/params.yaml: project.crs_epsg",
+        "codigo/common/io_cloud.py: write_las"
+      ],
+      "residual": "Ninguno si la evidencia da 100 %. Depende de pyproj: sin el, write_las escribe la geometria sin CRS y esta comprobacion lo detecta.",
+      "evidencia": {
+        "bloques_con_crs_correcto": 799,
+        "bloques": 799,
+        "cumple": true
+      }
+    },
+    {
+      "id": "Q2",
+      "severity": "blocking",
+      "field": "classification",
+      "finding": "Every sampled point carries classification == 1. The delivered set is 100% unlabelled.",
+      "decision": "pendiente (camino critico)",
+      "accion": "No se puede limpiar: falta la etiqueta. Se anota a mano, sobre el bloque de 200 m a resolucion completa y sin preetiqueta. La verdad de campo se guarda aparte, en `annotation_revisada/` versionada con DVC, porque `bloques` borra su carpeta al regenerarse.",
+      "donde": [
+        "docs/decisiones/0023-solo-postes-con-su-luminaria.md",
+        "docs/decisiones/0018-el-bloque-de-anotacion-sustituye-a-la-tesela.md",
+        "docs/decisiones/0020-tres-etapas-y-sin-borrador.md",
+        "herramientas/registrar_anotacion.py"
+      ],
+      "residual": "Sin etiquetas no hay entrenamiento supervisado. Los bloques salen con classification = 0 (sin clasificar) y la etiqueta se une al punto al registrar la anotacion.",
+      "evidencia": {
+        "classification_min": 0.0,
+        "classification_max": 0.0,
+        "cumple": true
+      }
+    },
+    {
+      "id": "Q3",
+      "severity": "medium",
+      "field": "number_of_returns",
+      "finding": "94.6% of sampled points are single-return; the rest have 2-3 returns.",
+      "decision": "aceptado",
+      "accion": "`number_of_returns` y `return_number` se descartan (`select.keep_dimensions`). El retorno multiple es marginal y no permite la regla de primer/ultimo retorno para separar suelo de cable; cuando haga falta altura sobre el suelo se calculara por geometria.",
+      "donde": [
+        "etapa_3_preparacion/params.yaml: select.keep_dimensions",
+        "etapa_3_preparacion/params.yaml: select.umbral_retorno_unico"
+      ],
+      "residual": "Se pierde la informacion de retorno del ~5 % de puntos que la tienen. Se acepta.",
+      "evidencia": {
+        "number_of_returns_max": 0.0,
+        "cumple": true
+      }
+    },
+    {
+      "id": "Q4",
+      "severity": "low",
+      "field": "red/green/blue",
+      "finding": "Colour is stored in 16-bit LAS fields but only uses the 0-255 range.",
+      "decision": "corregido",
+      "accion": "El color llega en campos LAS de 16 bits con valores de 0-255. Se lee como 8 bits y se escribe desplazado 8 bits, que es la convencion LAS: asi CloudCompare y cualquier normalizacion por 65535 ven el color real y no una nube casi negra.",
+      "donde": [
+        "codigo/common/io_cloud.py: _extract, write_las"
+      ],
+      "residual": "Ninguno: el desplazamiento es exacto y reversible.",
+      "evidencia": {
+        "rgb_max": 65280.0,
+        "rgb_multiplo_de_256": true,
+        "cumple": true
+      }
+    },
+    {
+      "id": "Q5",
+      "severity": "medium",
+      "field": "density",
+      "finding": "Density varies 5-3844 pts/m2 between files (mobile mapping: near the trajectory is dense, far is sparse).",
+      "decision": "aceptado y diferido al entrenamiento",
+      "accion": "No se iguala la densidad aqui. El bloque se guarda a resolucion completa porque es lo que se abre para anotar, y un poste lejano de la trayectoria ya tiene pocos puntos. La igualacion (reduccion por voxel) se hara al cortar la tesela de entrenamiento, sin tocar el bloque.",
+      "donde": [
+        "docs/decisiones/0018-el-bloque-de-anotacion-sustituye-a-la-tesela.md",
+        "etapa_3_preparacion/params.yaml: tiling.tesela_m"
+      ],
+      "residual": "Cualquier rasgo de radio fijo calculado sobre el bloque crudo se comporta distinto cerca y lejos de la trayectoria.",
+      "evidencia": {
+        "densidad_bloque_pts_m2": {
+          "min": 0.0,
+          "p50": 105.3,
+          "max": 1701.2
+        },
+        "cumple": true
+      }
+    }
+  ],
+  "puntos": {
+    "crudo": 5443246642,
+    "nucleo_en_bloques": 5443203444,
+    "descartados": 43198,
+    "descartados_pct": 0.000794,
+    "motivo": "bloques con menos de tiling.min_points = 2000 puntos no se escriben"
+  },
+  "controles": {
+    "point_source_id_no_nulo": true,
+    "gps_time_no_nulo": true,
+    "dimensiones_conservadas_presentes": true
+  },
+  "muestra": [
+    "datos/intermedio/01_bloques/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202501/b_1493_43239.laz",
+    "datos/intermedio/01_bloques/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202507/b_1483_43252.laz",
+    "datos/intermedio/01_bloques/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202503/b_1490_43269.laz",
+    "datos/intermedio/01_bloques/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202505/b_1483_43294.laz",
+    "datos/intermedio/01_bloques/Grupo03_crudo_2025/ate/AVP01MT2611202503/b_1468_43339.laz"
+  ],
+  "resumen": {
+    "hallazgos": 5,
+    "corregidos": 2,
+    "pendientes": 1,
+    "evidencia_cumple": 5,
+    "controles_cumplen": 3,
+    "controles": 3
+  }
+}

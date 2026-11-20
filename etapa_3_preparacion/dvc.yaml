@@ -1,0 +1,201 @@
+# ============================================================================
+# dvc.yaml · La receta de la etapa 3 (preparación de los datos)
+#
+#   dvc dag                 el grafo
+#   dvc repro               reejecuta solo lo que cambió
+#   dvc repro -f            reejecuta todo (la prueba de reproducibilidad)
+#   dvc metrics show        los reportes de cada etapa
+#   dvc params diff         qué decisiones cambiaron entre dos versiones
+#
+# Cinco etapas sobre nubes de puntos LiDAR (.laz), no sobre una tabla:
+#
+#   eda          2 · diagnóstico reproducible del crudo (etapa_1_2_comprension/)
+#   seleccionar  3.1 · inventario, catálogo y hallazgos de calidad
+#   bloques      3.5 · rejilla de 200 m a resolución completa: la unidad de
+#                anotación y de almacenamiento
+#   particionar  anti-fuga por superceldas espaciales
+#   documentar   3.2 y 3.4-3.5 · informe de limpieza y diccionario de datos
+#
+# No hay etapas de limpiar, construir ni integrar, y no es un olvido: el porqué
+# está en docs/decisiones/0022. Cada etapa apunta en `desc` a la entrada de la
+# bitácora que la justifica. Los datos viven en ../datos/ (crudo → intermedio
+# → final); el código en codigo/.
+#
+# `datos/crudo` se registra a mano como punteros .dvc por escaneo y NO se
+# declara como dependencia por directorio: obligaría a DVC a re-hashear 35 GB
+# en cada `repro`. `eda` y `seleccionar` declaran la carpeta LiDAR de cada
+# escaneo; al añadir un escaneo hay que añadir su línea en las dos.
+# ============================================================================
+stages:
+
+  eda:
+    desc: >
+      2 · comprensión de los datos · docs/decisiones/0011-eda-reproducible.md ·
+      Volumen, formato, periodo de captura y calidad del crudo. Lee solo los
+      .laz y es determinista: toda cifra que se cite sobre los datos tiene que
+      poder rastrearse a esta salida.
+    cmd: python ../etapa_1_2_comprension/codigo/eda.py
+    deps:
+      - ../etapa_1_2_comprension/codigo/eda.py
+      - codigo/common/io_cloud.py
+      - codigo/common/config.py
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202501/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202502/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202503/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202504/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202505/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202506/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202507/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202501/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202502/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202503/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202504/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202505/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202506/LiDAR
+      - ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202501/LiDAR
+      - ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202502/LiDAR
+      - ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202503/LiDAR
+    params:
+      - select.scan_groups
+      - select.scans
+      - select.keep_dimensions
+      - eda
+    outs:
+      - ../etapa_1_2_comprension/resultados/figuras:
+          cache: false
+    metrics:
+      - ../etapa_1_2_comprension/resultados/eda.json:
+          cache: false
+
+  seleccionar:
+    desc: >
+      3.1 seleccionar · docs/decisiones/0001-perfil-del-sensor.md ·
+      docs/decisiones/0009-solo-nubes-laz.md ·
+      Inventaria y cataloga los escaneos crudos (solo nubes .laz) con el MD5 de
+      cada archivo, perfila sus atributos sobre una muestra y emite los
+      hallazgos de calidad que `documentar` responde uno por uno.
+    cmd: python codigo/seleccionar.py
+    deps:
+      - codigo/seleccionar.py
+      - codigo/common/io_cloud.py
+      - codigo/common/config.py
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202501/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202502/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202503/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202504/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202505/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202506/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202507/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202501/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202502/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202503/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202504/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202505/LiDAR
+      - ../datos/crudo/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0208202506/LiDAR
+      - ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202501/LiDAR
+      - ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202502/LiDAR
+      - ../datos/crudo/Grupo03_crudo_2025/ate/AVP01MT2611202503/LiDAR
+    params:
+      - select.scan_groups
+      - select.scans
+      - select.keep_dimensions
+      - select.perfil
+      - select.umbral_retorno_unico
+      - project.crs_epsg
+    outs:
+      # Son tablas: la regla del repositorio las saca de git. Las versiona DVC
+      # y van al remoto (son KB).
+      - ../datos/intermedio/catalogo
+    metrics:
+      - reportes/raw_profile.json:
+          cache: false
+
+  bloques:
+    desc: >
+      3.5 dar formato · docs/decisiones/0018-el-bloque-de-anotacion-sustituye-a-la-tesela.md ·
+      docs/decisiones/0002-almacenamiento-y-remotos.md ·
+      Corta los escaneos en una rejilla determinista de 200 m anclada a la UTM
+      absoluta, con un anillo de contexto de 10 m, a resolución completa: no se
+      filtra ruido ni se reduce por vóxel. Escribe LAS 1.4 con el CRS que el
+      crudo no declaraba. El bloque es el archivo que se abre en CloudCompare
+      para anotar.
+    cmd: python codigo/bloques.py
+    deps:
+      - codigo/bloques.py
+      - codigo/common/io_cloud.py
+      - codigo/common/anotacion.py
+      - ../datos/intermedio/catalogo
+    params:
+      - tiling.bloque_m
+      - tiling.tesela_m
+      - tiling.buffer_m
+      - tiling.min_points
+      - tiling.max_bloques_por_escaneo
+      - tiling.bloque_selection
+      - project.crs_epsg
+    # NO se suben al remoto: son ~49 GB y `dvc repro` los reconstruye idénticos
+    # desde el crudo, porque la rejilla está anclada a la UTM absoluta y
+    # `tiling.bloque_m` está en params.yaml. Al remoto va lo irreemplazable: el
+    # crudo y la anotación (docs/decisiones/0002).
+    outs:
+      - ../datos/intermedio/01_bloques:
+          push: false
+    metrics:
+      - reportes/bloques.json:
+          cache: false
+
+  particionar:
+    desc: >
+      partición anti-fuga · docs/decisiones/0024-particion-por-superceldas.md ·
+      Cada bloque a train, valid o test, por superceldas espaciales de 1 km
+      que van enteras a una partición con todos los escaneos que las cubren:
+      los escaneos se solapan y partir por escaneo pondría el mismo poste en
+      train y en test.
+    cmd: python codigo/particionar.py
+    deps:
+      - codigo/particionar.py
+      - codigo/common/config.py
+      - ../datos/intermedio/01_bloques
+    params:
+      - particion
+      - project.random_seed
+      - tiling.bloque_m
+    outs:
+      - ../datos/final/particion.csv
+    metrics:
+      - reportes/particion.json:
+          cache: false
+
+  documentar:
+    desc: >
+      3.2 limpiar · 3.4-3.5 · docs/decisiones/0022-informe-de-limpieza-y-diccionario-generados.md ·
+      Informe de limpieza y diccionario de datos, generados y no escritos a
+      mano. Responde cada hallazgo de calidad de `seleccionar` con la decisión,
+      dónde vive y la evidencia medida sobre los bloques, y describe cada campo
+      del conjunto resultante. Falla si un hallazgo queda sin respuesta o un
+      campo sin descripción.
+    cmd: python codigo/documentar.py
+    deps:
+      - codigo/documentar.py
+      - codigo/common/config.py
+      - reportes/raw_profile.json
+      - reportes/bloques.json
+      - ../datos/intermedio/01_bloques
+      - ../datos/final/particion.csv
+    params:
+      - informe
+      - ontology
+      - project.crs_epsg
+      - select.keep_dimensions
+      - tiling.bloque_m
+      - tiling.min_points
+    outs:
+      - reportes/informe_limpieza.md:
+          cache: false
+      - ../docs/diccionario/diccionario.md:
+          cache: false
+      - ../docs/diccionario/diccionario.csv:
+          cache: false
+    metrics:
+      - reportes/informe_limpieza.json:
+          cache: false

@@ -1,0 +1,448 @@
+# ===========================================================================
+#  params.yaml — every decision that is not code
+# ===========================================================================
+#  Rule: no threshold, category list or business constant may live inside a
+#  program. If a value is tuned, argued about, or
+#  could reasonably be different, it belongs here so the change shows up as
+#  one readable line in the pipeline lock file.
+#
+#  Values below are grounded in a measured profile of the delivered scans,
+#  not in defaults copied from a tutorial. See reports/raw_profile.json and
+#  docs/decisiones/0001-perfil-del-sensor.md.
+#
+#  Perfil medido de las DOS entregas (474 .laz, ~35 GB comprimidos):
+#    5,443,246,642 puntos en total
+#      Grupo03_crudo_2025 / ate          61 archivos,   421,156,950
+#      Grupo01_crudo_2025 / Pachacamac  413 archivos, 5,022,089,692
+#    LAS 1.2, point format 3 | escala 0.001 m
+#    un solo retorno (return_number == 1 en todas partes)
+#    intensidad 0-255 | RGB de 8 bits, 0 % negro
+#    classification == 1 en todas partes -> los datos llegan SIN etiquetar
+#    point_source_id 0-15 -> indice de laser del VLP-16
+#    ninguna cabecera declara CRS | densidad 44-1152 pts/m2 entre archivos
+#    extension de escaneo hasta 2.6 x 1.7 km
+# ===========================================================================
+
+project:
+  name: automated-overhead-network-inspection
+  crs_epsg: 32718            # WGS84 / UTM 18S. The .laz files carry NO CRS
+                             # (header.parse_crs() -> None) while coordinates
+                             # are unmistakably UTM 18S easting/northing.
+                             # Every stage stamps this; see decisiones/0003.
+  vertical_datum: ellipsoidal_unverified
+                             # Z ~370-463 m over Lima is too high for
+                             # orthometric height. Treated as ellipsoidal
+                             # until the provider confirms. Only *relative*
+                             # heights are used downstream, so this does not
+                             # affect clearances.
+  random_seed: 42
+
+# ---------------------------------------------------------------------------
+# ONTOLOGY — 14 clases declaradas, 2 activas mas el fondo (0023). `id` es lo que predice el
+# modelo y lo que se escribe en el campo LAS `classification`. NO se
+# renumeran: los ids estan metidos en los checkpoints entrenados y en las
+# teselas ya anotadas. Las clases nuevas se anaden al final (green_area 8,
+# conductor_mv 9, tree 10, pole_lv_light 11, pole_mv 12, luminaire 13;
+# ver decisiones/0010, 0013, 0014, 0015, 0017).
+# Las etapas buscan las clases POR NOMBRE, nunca por posicion, asi que
+# anadir al final es seguro.
+#
+# EL CAMPO `estado` (0017, 0023). El alcance de esta fase del capstone es el
+# POSTE, de baja y de media, con su luminaria si la tiene. Las demas clases no
+# se borran: se marcan `en_espera`. Borrarlas obligaria a
+# renumerar al reactivarlas, y renumerar invalida toda la anotacion ya hecha.
+# Con `estado` el borrador y el entrenamiento solo miran `activa`, y
+# reactivar una clase es cambiar una palabra.
+#
+#   activa     entra en el borrador, en la anotacion y en el entrenamiento
+#   en_espera  documentada y con id reservado, fuera del pipeline
+#   obsoleta   id quemado: no volvera a usarse, se conserva para poder leer
+#              anotaciones viejas que lo contengan
+# ---------------------------------------------------------------------------
+ontology:
+  version: 7                 # v7: solo poste BT y poste MT; la luminaria
+                             # vuelve a ser parte del poste y la clase 13
+                             # queda obsoleta; conductor_mv pasa a
+                             # `en_espera` (0023).
+                             # v6: alcance reducido a poste BT, poste MT,
+                             # luminaria y conductor MT; la luminaria se
+                             # separa del poste y la clase 11 queda obsoleta;
+                             # el resto pasa a `en_espera` (0017).
+                             # v5: la ferreteria acoplada (mensula, cruceta,
+                             # pastoral) pasa de la clase 0 al poste; los ids
+                             # no cambian, solo el criterio (0015).
+                             # v4: poles split into LV, LV with street light
+                             # and MV (11, 12). v3: + conductor_mv and tree
+  ignore_id: 0               # excluded from the loss and from mIoU
+  classes:
+    - id: 0
+      name: unclassified
+      name_es: ruido_sin_clasificar
+      estado: activa
+      color: [128, 128, 128]
+      description: >
+        Todo lo que no es un activo del alcance actual: suelo, fachadas,
+        vegetacion, cables de baja y de telecomunicaciones, vehiculos,
+        peatones, ruido, y cualquier cosa sobre la que el anotador no tenga
+        confianza. Es un cajon de sastre a proposito: forzar una respuesta
+        aqui contaminaria las otras clases. Con el alcance de 0017 esta clase
+        pasa a ser la mayoria abrumadora de los puntos, y por eso queda
+        EXCLUIDA de la perdida y de la mIoU (`ignore_id`): el modelo no se
+        entrena para acertar "no es nada", se entrena para encontrar los
+        postes. La ferreteria ACOPLADA al poste —mensula, cruceta—
+        no cae aqui: es parte del poste desde 0015.
+    - id: 5
+      name: pole_lv
+      name_es: poste_bt
+      estado: activa
+      color: [0, 150, 100]
+      description: >
+        Poste de baja tension, CON o SIN luminaria instalada. Alcanza hasta
+        unos 8 m, frente a los mas de 11 m del poste de media. Incluye el
+        fuste MAS todo lo acoplado a el: mensulas, crucetas y herrajes (0015)
+        y, desde 0023, tambien el conjunto de alumbrado —pastoral mas
+        luminaria—. Un poste con luminaria es UN solo recorte, entero, con
+        esta clase. NO incluye los conductores que cuelgan de la mensula.
+        RETENIDA (0025): el brazo rigido del violin es poste; el cable que
+        baja al piso, y su anclaje, son fondo.
+        Lo que lo separa del poste de media es la altura y la ausencia de
+        conductores de MT junto a su punta, no la luminaria.
+    - id: 12
+      name: pole_mv
+      name_es: poste_mt
+      estado: activa
+      color: [255, 170, 0]
+      description: >
+        Poste de media tension. Es el mas alto de la escena —supera los 11 m—
+        y sostiene los conductores de MT. Se identifica por altura de columna
+        y por tener conductores de media pasando junto a su punta. Incluye
+        fuste, cruceta y herrajes (0015) y, si la lleva, la luminaria con su
+        pastoral (0023): todo el poste es un solo recorte con esta clase.
+        Retenida: el brazo rigido es poste, el cable al piso es fondo (0025).
+    - id: 13
+      name: luminaire
+      name_es: luminaria
+      estado: obsoleta
+      color: [255, 240, 60]
+      description: >
+        OBSOLETA desde 0023: la luminaria vuelve a ser parte del poste (5 o
+        12), que se recorta entero. El id se conserva, y no se reutiliza, para
+        poder leer anotaciones hechas entre 0017 y 0023. Lo que sigue es la
+        definicion que tuvo, por si se reactiva como clase propia.
+        El conjunto de alumbrado publico completo: el PASTORAL —el brazo
+        curvo que saca la carga fuera del eje del poste— mas el BLOQUE de la
+        luminaria en su extremo. Clase propia desde 0017, y no un tipo de
+        poste, porque la luminaria se instala indistintamente sobre un poste
+        de baja (clase 5) y sobre uno de media (clase 12): hacerla atributo
+        del poste obligaba a duplicar cada clase de poste, y asi el conteo de
+        puntos de alumbrado —que es lo que mide el inventario— no se podia
+        sacar de la prediccion.
+        Se reconoce por tres cosas (0014, 0015): saca la carga a mas de 1 m
+        del eje, acaba en un BLOQUE compacto, y de su punta NO cuelgan
+        conductores. Una mensula tambien es un brazo lateral, pero es corta,
+        de seccion constante, y de su extremo sale la baja tension: la
+        mensula es poste, no luminaria.
+        El limite con el poste se corta donde el pastoral se separa del
+        fuste. Es un corte convencional y algo ambiguo en 2-3 cm de puntos;
+        esa ambiguedad es conocida y se acepta.
+    - id: 9
+      name: conductor_mv
+      name_es: conductor_mt
+      estado: en_espera          # fuera del alcance de PI1 (0023)
+      color: [255, 110, 0]
+      description: >
+        Conductores de media tension: la red MT, el unico nivel de conductor
+        dentro del alcance de 0017. Es el mas alto de la escena y el mas
+        facil de anotar, que es justo por lo que entra: sus postes superan
+        los 11 m frente a los 8 m de baja, y suele ir en TRES FASES sobre
+        cruceta, con una separacion entre fases de 0.3 a 1.5 m que ninguna
+        otra estructura de la calle reproduce.
+        Cuando el armado es autoportante se ve como una sola linea, pero
+        siempre por encima del nivel de BT. La baja tension antigua puede
+        venir en 3 a 5 conductores paralelos y confundirse con un haz de MT:
+        se separa por altura del haz (ver `weak_labels.wires.mv_bundle`).
+        La separacion por altura sola es PROVISIONAL: ver 0013.
+
+    # -----------------------------------------------------------------------
+    # OBSOLETA — id quemado, no se vuelve a usar (0017)
+    # -----------------------------------------------------------------------
+    - id: 11
+      name: pole_lv_light
+      name_es: poste_bt_luminaria
+      estado: obsoleta
+      color: [0, 200, 160]
+      description: >
+        OBSOLETA desde 0017. Era "poste de baja CON luminaria", de cuando la
+        luminaria era un tipo de poste en vez de una clase. Se descompone en
+        poste_bt (5) para el fuste y luminaria (13) para el alumbrado.
+        El id se conserva, y no se reutiliza, para poder seguir leyendo las
+        anotaciones registradas antes de 0017; `tools/migrar_ontologia.py`
+        las reparte entre 5 y 13.
+
+    # -----------------------------------------------------------------------
+    # EN ESPERA — id reservado, fuera del borrador y del entrenamiento (0017)
+    # -----------------------------------------------------------------------
+    - id: 1
+      name: road
+      name_es: pista
+      estado: en_espera
+      color: [80, 80, 80]
+      description: Superficie de calzada vehicular, hasta el borde de la vereda.
+    - id: 2
+      name: sidewalk
+      name_es: vereda
+      estado: en_espera
+      color: [200, 180, 140]
+      description: >
+        Vereda peatonal, incluido su borde elevado. Ese borde no es una clase
+        aparte: 12-20 cm de alto no sobreviven a voxeles de 5 cm, y separarlo
+        daria una clase casi sin puntos (ver 0013).
+    - id: 3
+      name: building
+      name_es: limite_construccion
+      estado: en_espera
+      color: [180, 70, 60]
+      description: >
+        Fachadas y muros de limite de propiedad. Objetivo del paso de
+        vectorizacion de poligonos para exportacion a CAD.
+    - id: 4
+      name: manhole
+      name_es: buzon
+      estado: en_espera
+      color: [255, 200, 0]
+      description: >
+        Tapas de acceso a servicios, enrasadas con la pista o la vereda. La
+        clase mas dificil: un disco de 0.6 a 1.0 m geometricamente coplanar
+        con su entorno, separable sobre todo por intensidad y color.
+    - id: 6
+      name: conductor_lv
+      name_es: conductor_bt
+      estado: en_espera
+      color: [230, 30, 30]
+      description: >
+        Conductores de baja tension. Cuelgan de postes que llegan hasta unos
+        8 m, por encima del nivel de telecomunicaciones y por debajo de la
+        media tension. Antes esta clase agrupaba BT y MT (ver 0013).
+        Aunque esta en espera, el borrador sigue calculando su mascara EN
+        MEMORIA sin etiquetarla: es la senal negativa que distingue una
+        mensula de un pastoral —si del extremo del brazo cuelga baja tension,
+        es mensula— y sin ella la clase 13 pierde su mejor discriminante.
+    - id: 7
+      name: telecom_line
+      name_es: cable_telecom
+      estado: en_espera
+      color: [30, 90, 230]
+      description: >
+        Haces de telefonia, television por cable y fibra. Cuelgan por debajo
+        del nivel electrico y son mucho mas densos y desordenados (las
+        "telaranas"). Separar la clase 6 de la 7 es sobre todo un problema de
+        nivel de altura y grosor de haz, no de apariencia punto a punto.
+    - id: 8
+      name: green_area
+      name_es: area_verde
+      estado: en_espera
+      color: [110, 180, 60]
+      description: >
+        Areas verdes a nivel de suelo junto a la calzada: bermas y separadores
+        con cesped, jardines, maceteros y alcorques. La vegetacion en altura
+        es la clase 10 (arbol). Clase minoritaria: menos del 1 % de los puntos
+        a nivel de suelo tiene tono verde saturado.
+    - id: 10
+      name: tree
+      name_es: arbol
+      estado: en_espera
+      color: [30, 110, 50]
+      description: >
+        Copas y ramaje: vegetacion por encima de 2 m. Se separa del area verde
+        porque son problemas distintos: la copa importa para las distancias de
+        seguridad a los conductores, el area verde para el contexto de
+        superficie.
+
+# ---------------------------------------------------------------------------
+# 3.1 SELECT — which files and which columns enter
+# ---------------------------------------------------------------------------
+select:
+  # Las dos entregas. `ate` son 421 M puntos en 3 escaneos y `Pachacamac`
+  # 5 022 M en 13: en total 5 443 246 642 puntos y 474 archivos, medido con
+  # cabeceras. Entra todo.
+  scan_groups: [Grupo03_crudo_2025, Grupo01_crudo_2025]
+  # Vacio = TODOS los escaneos que se encuentren bajo los grupos de arriba.
+  # Estaba como lista explicita de los 3 de ate, que era razonable con 3 y es
+  # una fuente de error con 16: un escaneo nuevo en disco y ausente de la lista
+  # no da aviso, simplemente no se procesa, y el repositorio pasa a describir
+  # menos datos de los que tiene. `find_laz` descubre la carpeta de cada
+  # escaneo buscando `LiDAR/GeoRef`, asi que acepta el nivel de distrito de
+  # Pachacamac y la ausencia de distrito de la entrega anterior.
+  # Para trabajar sobre un subconjunto, se nombran aqui.
+  scans: []
+  # Columns kept from the LAS point record. Dropped and why:
+  #   return_number, number_of_returns  -> casi constante: el perfil mide un
+  #       ~5 % de puntos con 2-3 retornos (hallazgo Q3, reports/limpieza.json).
+  #       Se descarta igual: el VLP-16 de esta entrega no da el primer/ultimo
+  #       retorno que haria util el campo para separar suelo de cable. Decia
+  #       "constant 1", y era falso.
+  #   scan_direction_flag, edge_of_flight_line, user_data -> constant
+  #   classification -> constant 1 (the data arrives unlabelled)
+  keep_dimensions: [x, y, z, intensity, gps_time, red, green, blue, point_source_id]
+  min_points_per_file: 1000
+  # Muestreo del perfil de atributos de la etapa catalog. Vivian como
+  # constantes dentro de s01_catalog.py. El perfil lee una muestra de puntos
+  # reales, repartida entre escaneos, porque leer los 5 443 M cuesta horas y
+  # no cambia una distribucion de intensidad o de color.
+  perfil:
+    archivos_muestra: 12          # repartidos a paso fijo entre todos los .laz
+    puntos_por_archivo: 2000000   # el primer trozo de cada archivo
+    puntos_para_conteos: 200000   # de esos, cuantos entran en los conteos de
+                                  # classification y number_of_returns
+  # Hallazgo Q3: por encima de esta fraccion de puntos con un solo retorno, el
+  # retorno multiple se considera marginal y el campo se descarta.
+  umbral_retorno_unico: 0.90
+
+# ---------------------------------------------------------------------------
+# 3.5 FORMAT / tiling — the unit of work
+# ---------------------------------------------------------------------------
+# DOS REJILLAS, NO UNA (docs/decisiones/0018). Hasta la v5 la tesela de 40 m
+# era a la vez la unidad de almacenamiento, de anotacion y de entrenamiento.
+# Ese "las tres no pueden discrepar" costaba mas de lo que daba:
+#
+#   * 40 m parte los objetos. Un vano de MT mide 50-70 m, asi que sale cortado
+#     SIEMPRE, y decidir su clase tres veces sin ver nunca la catenaria entera
+#     es la causa principal de error de anotacion. El parche fueron las zonas
+#     de 0016: agrupar teselas al VER para volver a partirlas al REGISTRAR.
+#   * El acelerador `max_tiles_per_scan: 12` no elegia un recorte del area,
+#     elegia 12 manchas sueltas por escaneo —36 teselas, 43 M de los 421 M
+#     puntos— y eso es lo que se veia como "al pasar a teselas se pierden
+#     puntos". No se perdian en el corte: no se materializaban.
+#
+# Desde 0018 son dos rejillas con un unico origen comun:
+#
+#   BLOQUE  `bloque_m`, la unidad de almacenamiento y de ANOTACION. Es lo que
+#           se abre en CloudCompare y sobre lo que se recorta.
+#   TESELA  `tesela_m`, la unidad de ENTRENAMIENTO. Se corta del bloque ya
+#           anotado, en la etapa dataset, y no se materializa en disco.
+#
+# Las dos son multiplos de la misma rejilla absoluta en UTM y `bloque_m` es
+# multiplo de `tesela_m`, asi que el borde de una tesela nunca cruza un bloque
+# y un mismo id cubre siempre el mismo suelo, en todos los escaneos y en todas
+# las ejecuciones.
+tiling:
+  bloque_m: 200.0     # 5 x 5 teselas. A 751 pts/m2 medidos, un bloque de calle
+                      # ronda 1-6 M puntos crudos (0.4-2 M a 5 cm): se abre en
+                      # CloudCompare, y la vista limpia —sin suelo ni fachadas—
+                      # baja a decenas de miles. Cabe entero un vano de MT de
+                      # 70 m, que es la razon del tamano.
+  tesela_m: 40.0      # La muestra de entrenamiento. 40 m a 5 cm entra en 8 GB
+                      # de VRAM y es ~ una cara de manzana. Cambiar esto NO
+                      # obliga a recortar de nuevo: la anotacion vive en
+                      # coordenadas del bloque, no de la tesela (0018).
+  buffer_m: 10.0      # Anillo de contexto, para que un rasgo calculado junto
+                      # al borde no vea un vecindario truncado y queden
+                      # costuras visibles. Tiene que superar el radio de rasgo
+                      # mas grande (`features.radii_m` -> 2.0 m) con holgura.
+                      # Era 5.0 con teselas de 40 m; a 200 m, 10 m sigue
+                      # siendo un 10 % de solape y da algo de contexto visual.
+  min_points: 2000    # Por debajo de esto el bloque es calle vacia; se salta.
+                      # Mucho mas bajo que los 5000 de la tesela de 40 m: a
+                      # 200 m un bloque con pocos puntos es un roce de la
+                      # trayectoria, y puede llevar el unico poste de la
+                      # esquina. Lo que sobra es un archivo casi vacio.
+  grid_origin: snap_to_multiple    # los bordes son multiplos de bloque_m, asi
+                                   # que la rejilla es determinista
+  # Acelerador. 0 = TODOS los bloques, que es el objetivo y lo que hace que no
+  # se pierda ni un punto. Con los 421 M de ate medidos cuesta ~4.5 h de CPU y
+  # ~50 GB de interim (F: tiene 666 GB libres), asi que ya no hay motivo de
+  # almacenamiento para limitarlo. Se deja en un numero pequeno solo mientras
+  # se valida la cadena de punta a punta; ver 0018.
+  max_bloques_por_escaneo: 0
+  bloque_selection: densest        # densest | first | random
+
+
+# ---------------------------------------------------------------------------
+# ANOTACION — la vista que se abre en CloudCompare
+# ---------------------------------------------------------------------------
+# Lo que necesita `tools/registrar_anotacion.py` para emparejar un recorte con
+# los puntos del bloque. Varios de estos valores vivian como valores por
+# defecto de argparse dentro de las herramientas, que es justo la constante
+# escondida en el codigo que este archivo existe para evitar: nadie podia
+# saber con que umbral se genero una vista ni quedaba en el lock file.
+anotacion:
+  # Lo que esta por debajo de esta altura sobre el suelo se quita de la vista:
+  # pista, vereda, autos y peatones. 2.5 m deja fuera un camion alto y no toca
+  # el arranque de ningun poste que importe —un poste se reconoce por su parte
+  # alta—, y sobre todo libera las tijeras de CloudCompare: recortar un poste
+  # con la calle detras se lleva la calle.
+  altura_min_m: 2.5
+  # Clases a quitar de la vista. Vacio desde 0017: la unica que se quitaba era
+  # `building`, y con las fachadas `en_espera` ya no se etiqueta ninguna. Las
+  # fachadas las quita ahora `max_sin_clase`, que es mas general.
+  quitar_clases: []
+  # Distancia para que dos puntos cuenten como del mismo objeto. 0.50 m es
+  # mayor que el `clean.cluster_filter.eps_m` de 0.40 m a proposito: aqui no
+  # se busca limpiar ruido sino que un vano entero salga como UN grupo, y la
+  # catenaria tiene huecos donde el laser no devolvio.
+  eps_m: 0.50
+  min_puntos_objeto: 40       # grupos mas pequenos son ruido
+  # Linealidad (escala de 0.8 m) desde la que un punto se protege de los
+  # filtros de ruido y de fachada. Un conductor es lineal; el ruido y una
+  # pared no. Es la misma idea que protege los cables en la etapa 04 (0004).
+  min_linealidad: 0.70
+  # Oculta objetos SIN CLASE mas grandes que esto: son fachadas y techos que
+  # el borrador no reconocio, no postes. Con el alcance de 0017 esta es la
+  # herramienta principal para quitar fachadas, porque la clase `building` ya
+  # no se etiqueta. Un poste siempre queda por debajo: el mas grande medido no
+  # pasa de unos miles de puntos, y ademas va con clase, no sin ella.
+  max_sin_clase: 5000
+  # Bloques de contexto alrededor del que se anota. 1 = los 8 vecinos. Da
+  # continuidad a un vano que cruza el borde; van marcados con `nucleo = 0`.
+  anillo_bloques: 1
+  # Radio para emparejar un punto de un recorte con su punto del bloque, al
+  # registrar. Se empareja por COORDENADA y no por indice porque guardar en
+  # CloudCompare puede reordenar los puntos o dejar alguno fuera.
+  # Vivia en `dataset.annotation.tolerancia_m`, que desaparecio con la etapa
+  # 07. Era 0.02 m —medio voxel de 5 cm— cuando se anotaba sobre la nube
+  # voxelizada. Ahora se anota sobre el bloque a RESOLUCION COMPLETA y los
+  # puntos son los mismos de origen, asi que basta la escala del LAS (0.001 m)
+  # con margen: 0.005 m empareja el punto exacto y no al vecino, que a 751
+  # pts/m2 esta a unos 3 cm.
+  tolerancia_m: 0.005
+
+# ---------------------------------------------------------------------------
+# PARTICION — anti-fuga por superceldas espaciales (0024, sustituye a 0007)
+# ---------------------------------------------------------------------------
+# La unidad es el SUELO, no la pasada: los escaneos se solapan y el mismo poste
+# aparece en varios. Cada supercelda va entera a una particion, con todos los
+# escaneos que la cubren.
+particion:
+  supercelda_m: 1000.0     # 5 x 5 bloques de 200 m: varias calles, lo bastante
+                           # para que un poste de test no comparta contexto
+                           # con los de train salvo en el borde.
+  proporciones:            # fraccion de PUNTOS de nucleo, no de bloques
+    train: 0.70
+    valid: 0.15
+    test: 0.15
+
+# ---------------------------------------------------------------------------
+# INFORME — informe de limpieza y diccionario de datos (0022)
+# ---------------------------------------------------------------------------
+informe:
+  # Bloques que se leen enteros para medir el rango de cada campo y la
+  # evidencia de cada hallazgo. Repartidos a paso fijo sobre el indice ordenado
+  # por ruta, asi que la muestra es la misma en cada ejecucion. El CRS no
+  # depende de esto: se comprueba en la cabecera de TODOS los bloques.
+  bloques_muestra: 5
+
+eda:
+  sample_files: 12
+  sample_chunk_points: 1000000
+  outlier_iqr_k: 3.0             # Tukey fences on Z, per file
+  scan_date_pattern: '(\d{2})(\d{2})(\d{4})\d{2}$'   # AVP01MT[26112025]01
+  gps_utc_leap_seconds: 18       # GPS - UTC since 2017
+  local_utc_offset_hours: -5     # Lima, no daylight saving
+  # Definicion de «verde» para el histograma de tono del EDA. Vivia en
+  # `weak_labels.green_area`, que desaparecio con la etapa 06; el analisis se
+  # queda porque es un hallazgo de calidad del dato —cuanto del color entregado
+  # es vegetacion saturada— y no depende de que la clase area_verde este
+  # activa.
+  banda_verde_hue_deg: [70, 170]
+  banda_verde_min_saturation: 0.12
+  banda_verde_min_value: 0.12

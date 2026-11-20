@@ -1,0 +1,49 @@
+{
+  "estrategia": "superceldas espaciales sobre la rejilla UTM absoluta",
+  "supercelda_m": 1000.0,
+  "proporciones_objetivo": {
+    "train": 0.7,
+    "valid": 0.15,
+    "test": 0.15
+  },
+  "particiones": {
+    "train": {
+      "superceldas": 40,
+      "bloques": 578,
+      "points_core": 3749907954,
+      "fraccion_puntos": 0.6889,
+      "escaneos": 16,
+      "distritos": [
+        "Pachacamac",
+        "ate"
+      ]
+    },
+    "valid": {
+      "superceldas": 14,
+      "bloques": 144,
+      "points_core": 883943795,
+      "fraccion_puntos": 0.1624,
+      "escaneos": 12,
+      "distritos": [
+        "Pachacamac",
+        "ate"
+      ]
+    },
+    "test": {
+      "superceldas": 3,
+      "bloques": 77,
+      "points_core": 809351695,
+      "fraccion_puntos": 0.1487,
+      "escaneos": 9,
+      "distritos": [
+        "Pachacamac",
+        "ate"
+      ]
+    }
+  },
+  "comprobaciones": {
+    "ids_de_bloque_en_varias_particiones": 0,
+    "pares_vecinos_en_particiones_distintas": 192,
+    "sin_fuga_de_suelo": true
+  }
+}
