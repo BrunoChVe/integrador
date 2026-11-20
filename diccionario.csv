@@ -1,0 +1,45 @@
+tabla,columna,tipo,unidad,origen,minimo,maximo,ejemplo,descripcion
+punto (.laz del bloque),X,int32,m,crudo,293 590,298 809.999,,Este UTM 18S. Guardado como entero con escala 0.001 m; se lee siempre en float64 (en float32 se perderian ~6 cm).
+punto (.laz del bloque),Y,int32,m,crudo,8 647 794.082,8 667 900.097,,"Norte UTM 18S, misma escala y precision que X."
+punto (.laz del bloque),Z,int32,m,crudo,-29.197,550.447,,"Altura elipsoidal sin verificar (`project.vertical_datum`). Solo se usan alturas relativas, asi que el datum no afecta a las medidas de gálibo."
+punto (.laz del bloque),intensity,uint16,-,crudo,0,255,,"Intensidad del retorno del laser, 0-255 en esta entrega. Sin calibrar por distancia."
+punto (.laz del bloque),return_number,uint8,-,no se conserva,0,0,,Descartado en `select.keep_dimensions` (Q3). Siempre 0 en el bloque.
+punto (.laz del bloque),number_of_returns,uint8,-,no se conserva,0,0,,Descartado en `select.keep_dimensions` (Q3). Siempre 0 en el bloque.
+punto (.laz del bloque),synthetic,uint8,bandera,no se usa,0,0,,Bandera LAS de punto sintetico. Siempre 0.
+punto (.laz del bloque),key_point,uint8,bandera,no se usa,0,0,,Bandera LAS de punto clave. Siempre 0.
+punto (.laz del bloque),withheld,uint8,bandera,no se usa,0,0,,Bandera LAS de punto retenido. Siempre 0.
+punto (.laz del bloque),overlap,uint8,bandera,no se usa,0,0,,"Bandera LAS de solape entre pasadas. Siempre 0: el solape entre escaneos se resuelve con un bloque por escaneo, no marcando puntos."
+punto (.laz del bloque),scanner_channel,uint8,-,no se usa,0,0,,Canal del escaner (LAS 1.4). Siempre 0; el indice de laser va en point_source_id.
+punto (.laz del bloque),scan_direction_flag,uint8,bandera,no se conserva,0,0,,Constante en el crudo; descartado.
+punto (.laz del bloque),edge_of_flight_line,uint8,bandera,no se conserva,0,0,,Constante en el crudo; descartado.
+punto (.laz del bloque),classification,uint8,id de clase,anotacion,0,0,,"Clase del punto segun `ontology.classes`. En el bloque vale 0 (sin clasificar, Q2); la anotacion escribe aqui el id de la clase."
+punto (.laz del bloque),user_data,uint8,-,no se conserva,0,0,,Constante en el crudo; descartado.
+punto (.laz del bloque),scan_angle,int16,grados,no se usa,0,0,,Angulo de escaneo. El crudo (formato 3) no lo trae util; siempre 0.
+punto (.laz del bloque),point_source_id,uint16,-,crudo,0,15,,"Indice de laser del VLP-16, 0-15. Proxy debil del angulo vertical del rayo. Se perdia en silencio hasta 5fefd3f; aqui se comprueba que no vuelva a salir todo a 0."
+punto (.laz del bloque),gps_time,float64,s,crudo,315 833.399,593 003.380,,Tiempo GPS de la medida (segundos de la semana GPS). Ordena los puntos a lo largo de la trayectoria.
+punto (.laz del bloque),red,uint16,-,"crudo, reescalado",0,65 280,,"Canal rojo de la colorizacion por camara, 0-255 desplazado a 16 bits (Q4): valores multiplos de 256."
+punto (.laz del bloque),green,uint16,-,"crudo, reescalado",0,65 280,,"Canal verde, igual que red."
+punto (.laz del bloque),blue,uint16,-,"crudo, reescalado",0,65 280,,"Canal azul, igual que red."
+bloque_index.csv,scan,,,,,,PACHAP01MT0108202501,Escaneo de origen: nombre de su carpeta en datos/crudo. Un mismo suelo cubierto por dos escaneos da dos bloques.
+bloque_index.csv,grupo,,,,,,Grupo01_crudo_2025,Entrega de la que viene el escaneo (primer nivel de datos/crudo).
+bloque_index.csv,distrito,,,,,,Pachacamac,Distrito (segundo nivel de datos/crudo); vacio si la entrega no tiene ese nivel.
+bloque_index.csv,bloque_ix,,,,,,1493,Indice de columna de la rejilla: floor(este / bloque_m).
+bloque_index.csv,bloque_iy,,,,,,43239,Indice de fila de la rejilla: floor(norte / bloque_m).
+bloque_index.csv,path,,,,,,datos/intermedio/01_bloques/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202501/b_1493_43239.laz,"Ruta del .laz del bloque, relativa a la raiz del repositorio."
+bloque_index.csv,points_total,,,,,,915726,"Puntos del archivo, nucleo mas anillo de contexto."
+bloque_index.csv,points_core,,,,,,202657,"Puntos dentro del cuadrado de bloque_m, sin anillo."
+bloque_index.csv,min_x,,,,,,298600.0,"Este de la esquina SO del nucleo (m, UTM 18S)."
+bloque_index.csv,min_y,,,,,,8647800.0,"Norte de la esquina SO del nucleo (m, UTM 18S)."
+bloque_index.csv,bloque_m,,,,,,200.0,"Lado del nucleo (m), `tiling.bloque_m`."
+bloque_index.csv,buffer_m,,,,,,10.0,"Ancho del anillo de contexto (m), `tiling.buffer_m`."
+bloque_index.csv,min_z,,,,,,-29.197000000000003,Z minima de los puntos del bloque (m).
+bloque_index.csv,max_z,,,,,,209.565,Z maxima de los puntos del bloque (m).
+bloque_index.csv,density_core_pts_m2,,,,,,5.1,points_core / bloque_m^2.
+particion.csv (tabla final),path,,,,,,datos/intermedio/01_bloques/Grupo01_crudo_2025/Pachacamac/PACHAP01MT0108202501/b_1493_43239.laz,Ruta del .laz del bloque; enlaza con bloque_index.csv.
+particion.csv (tabla final),scan,,,,,,PACHAP01MT0108202501,Escaneo de origen.
+particion.csv (tabla final),distrito,,,,,,Pachacamac,Distrito de origen.
+particion.csv (tabla final),bloque_ix,,,,,,1493,Columna de la rejilla de bloques.
+particion.csv (tabla final),bloque_iy,,,,,,43239,Fila de la rejilla de bloques.
+particion.csv (tabla final),supercelda,,,,,,s_298_8647,Celda de `particion.supercelda_m` que contiene al bloque: la unidad que se asigna entera a una particion.
+particion.csv (tabla final),points_core,,,,,,202657,"Puntos de nucleo del bloque, para pesar las particiones."
+particion.csv (tabla final),particion,,,,,,train,"train, valid o test."
